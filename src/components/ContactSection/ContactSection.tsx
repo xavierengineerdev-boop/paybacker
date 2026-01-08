@@ -7,7 +7,7 @@ import { sendToTelegram, FormData } from '../../services/telegramService'
 import { getUserInfo, getUserIP, formatDateTime } from '../../utils/userInfo'
 import { useSuccessPopup } from '../../contexts/SuccessPopupContext'
 import { scrollToSection } from '../../utils/scrollToSection'
-import type { E164Number } from 'react-phone-number-input'
+import type E164Number from 'react-phone-number-input'
 
 interface FormInputs {
   name: string
