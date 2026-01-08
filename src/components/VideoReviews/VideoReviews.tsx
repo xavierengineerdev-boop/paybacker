@@ -1,137 +1,145 @@
-import { useState, useRef, useEffect } from 'react'
-import { Box, Typography, IconButton, useMediaQuery, useTheme, Modal } from '@mui/material'
-import { motion } from 'framer-motion'
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos'
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import CloseIcon from '@mui/icons-material/Close'
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloseIcon from '@mui/icons-material/Close';
+import { Box, IconButton, Modal, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 
 const VideoReviews = () => {
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const [currentSlide, setCurrentSlide] = useState(0)
-  const [playingVideoIndex, setPlayingVideoIndex] = useState<number | null>(null)
-  const [fullscreenVideo, setFullscreenVideo] = useState<{ src: string; index: number } | null>(null)
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([])
-  const totalSlides = 3
-  const slidesPerView = isMobile ? 1 : 3
-  const slideGap = 20
-  
-  const videos = [
-    '/video/1.mov',
-    '/video/2.mp4',
-    '/video/3.mp4',
-  ]
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [playingVideoIndex, setPlayingVideoIndex] = useState<number | null>(null);
+  const [fullscreenVideo, setFullscreenVideo] = useState<{ src: string; index: number } | null>(
+    null,
+  );
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const totalSlides = 3;
+  const slidesPerView = isMobile ? 1 : 3;
+  const slideGap = 20;
+
+  const videos = ['/video/1.mp4', '/video/2.mp4', '/video/3.mov'];
 
   const handlePrev = () => {
-    setCurrentSlide((prev) => Math.max(0, prev - 1))
-  }
+    setCurrentSlide((prev) => Math.max(0, prev - 1));
+  };
 
   const handleNext = () => {
-    setCurrentSlide((prev) => Math.min(totalSlides - slidesPerView, prev + 1))
-  }
+    setCurrentSlide((prev) => Math.min(totalSlides - slidesPerView, prev + 1));
+  };
 
   const handleVideoPlay = (index: number) => {
     // Останавливаем все остальные видео
     videoRefs.current.forEach((video, i) => {
       if (video && i !== index) {
-        video.pause()
+        video.pause();
       }
-    })
-    setPlayingVideoIndex(index)
-  }
+    });
+    setPlayingVideoIndex(index);
+  };
 
   const handleVideoPause = (index: number) => {
     if (playingVideoIndex === index) {
-      setPlayingVideoIndex(null)
+      setPlayingVideoIndex(null);
     }
-  }
+  };
 
   const handleFullscreenRequest = (index: number) => {
-    setFullscreenVideo({ src: videos[index], index })
-  }
+    setFullscreenVideo({ src: videos[index], index });
+  };
 
   const handleCloseFullscreen = () => {
     // Останавливаем видео в модальном окне при закрытии
-    setFullscreenVideo(null)
-  }
+    setFullscreenVideo(null);
+  };
 
   // Перехватываем событие fullscreen и открываем модальное окно вместо нативного fullscreen
   useEffect(() => {
     const handleFullscreenChange = (index: number) => () => {
       // Если браузер пытается открыть fullscreen, отменяем и открываем модальное окно
-      if (document.fullscreenElement || (document as any).webkitFullscreenElement || (document as any).mozFullScreenElement) {
-        if (document.exitFullscreen) document.exitFullscreen()
-        if ((document as any).webkitExitFullscreen) (document as any).webkitExitFullscreen()
-        if ((document as any).mozCancelFullScreen) (document as any).mozCancelFullScreen()
-        if ((document as any).msExitFullscreen) (document as any).msExitFullscreen()
-        handleFullscreenRequest(index)
+      if (
+        document.fullscreenElement ||
+        (document as any).webkitFullscreenElement ||
+        (document as any).mozFullScreenElement
+      ) {
+        if (document.exitFullscreen) document.exitFullscreen();
+        if ((document as any).webkitExitFullscreen) (document as any).webkitExitFullscreen();
+        if ((document as any).mozCancelFullScreen) (document as any).mozCancelFullScreen();
+        if ((document as any).msExitFullscreen) (document as any).msExitFullscreen();
+        handleFullscreenRequest(index);
       }
-    }
+    };
 
     // Используем MutationObserver для отслеживания кликов на кнопку fullscreen
-    const observers: MutationObserver[] = []
+    const observers: MutationObserver[] = [];
 
     videoRefs.current.forEach((video, index) => {
       if (video) {
-        const fullscreenHandler = handleFullscreenChange(index)
-        video.addEventListener('fullscreenchange', fullscreenHandler)
-        video.addEventListener('webkitfullscreenchange', fullscreenHandler)
-        video.addEventListener('mozfullscreenchange', fullscreenHandler)
-        video.addEventListener('MSFullscreenChange', fullscreenHandler)
-        
+        const fullscreenHandler = handleFullscreenChange(index);
+        video.addEventListener('fullscreenchange', fullscreenHandler);
+        video.addEventListener('webkitfullscreenchange', fullscreenHandler);
+        video.addEventListener('mozfullscreenchange', fullscreenHandler);
+        video.addEventListener('MSFullscreenChange', fullscreenHandler);
+
         // Отслеживаем клики на контролы видео
         const handleControlsClick = (e: Event) => {
-          const target = e.target as HTMLElement
+          const target = e.target as HTMLElement;
           // Проверяем различные варианты кнопки fullscreen
           if (target.tagName === 'BUTTON') {
-            const ariaLabel = target.getAttribute('aria-label') || ''
-            const title = target.getAttribute('title') || ''
-            if (ariaLabel.toLowerCase().includes('fullscreen') || 
-                title.toLowerCase().includes('fullscreen') ||
-                target.classList.contains('vjs-fullscreen-control')) {
-              e.preventDefault()
-              e.stopPropagation()
-              handleFullscreenRequest(index)
+            const ariaLabel = target.getAttribute('aria-label') || '';
+            const title = target.getAttribute('title') || '';
+            if (
+              ariaLabel.toLowerCase().includes('fullscreen') ||
+              title.toLowerCase().includes('fullscreen') ||
+              target.classList.contains('vjs-fullscreen-control')
+            ) {
+              e.preventDefault();
+              e.stopPropagation();
+              handleFullscreenRequest(index);
             }
           }
-        }
+        };
 
         // Добавляем обработчик после загрузки контролов
         video.addEventListener('loadedmetadata', () => {
-          const controls = video.parentElement?.querySelector('.vjs-control-bar')
+          const controls = video.parentElement?.querySelector('.vjs-control-bar');
           if (controls) {
-            controls.addEventListener('click', handleControlsClick, true)
+            controls.addEventListener('click', handleControlsClick, true);
           }
-        })
+        });
 
         // Также слушаем клики на самом видео элементе
-        video.addEventListener('click', (e) => {
-          const target = e.target as HTMLElement
-          if (target.tagName === 'BUTTON') {
-            const ariaLabel = target.getAttribute('aria-label') || ''
-            if (ariaLabel.toLowerCase().includes('fullscreen')) {
-              e.preventDefault()
-              e.stopPropagation()
-              handleFullscreenRequest(index)
+        video.addEventListener(
+          'click',
+          (e) => {
+            const target = e.target as HTMLElement;
+            if (target.tagName === 'BUTTON') {
+              const ariaLabel = target.getAttribute('aria-label') || '';
+              if (ariaLabel.toLowerCase().includes('fullscreen')) {
+                e.preventDefault();
+                e.stopPropagation();
+                handleFullscreenRequest(index);
+              }
             }
-          }
-        }, true)
+          },
+          true,
+        );
       }
-    })
+    });
 
     return () => {
       videoRefs.current.forEach((video, index) => {
         if (video) {
-          const fullscreenHandler = handleFullscreenChange(index)
-          video.removeEventListener('fullscreenchange', fullscreenHandler)
-          video.removeEventListener('webkitfullscreenchange', fullscreenHandler)
-          video.removeEventListener('mozfullscreenchange', fullscreenHandler)
-          video.removeEventListener('MSFullscreenChange', fullscreenHandler)
+          const fullscreenHandler = handleFullscreenChange(index);
+          video.removeEventListener('fullscreenchange', fullscreenHandler);
+          video.removeEventListener('webkitfullscreenchange', fullscreenHandler);
+          video.removeEventListener('mozfullscreenchange', fullscreenHandler);
+          video.removeEventListener('MSFullscreenChange', fullscreenHandler);
         }
-      })
-      observers.forEach(observer => observer.disconnect())
-    }
-  }, [])
+      });
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, []);
 
   return (
     <Box
@@ -191,7 +199,10 @@ const VideoReviews = () => {
           <Box
             sx={{
               overflow: 'hidden',
-              width: { xs: '100%', md: `${slidesPerView * 423 + (slidesPerView - 1) * slideGap}px` },
+              width: {
+                xs: '100%',
+                md: `${slidesPerView * 423 + (slidesPerView - 1) * slideGap}px`,
+              },
               position: 'relative',
             }}
           >
@@ -202,7 +213,7 @@ const VideoReviews = () => {
                 gap: { xs: '0px', md: '20px' },
                 position: 'relative',
                 width: { xs: `${totalSlides * 100}%`, md: 'fit-content' },
-                transform: isMobile 
+                transform: isMobile
                   ? `translateX(-${(currentSlide * 100) / totalSlides}%)`
                   : `translateX(-${currentSlide * (423 + slideGap)}px)`,
                 transition: 'transform 0.3s ease',
@@ -229,7 +240,7 @@ const VideoReviews = () => {
                   <Box
                     component="video"
                     ref={(el) => {
-                      videoRefs.current[index] = el as HTMLVideoElement | null
+                      videoRefs.current[index] = el as HTMLVideoElement | null;
                     }}
                     src={videoSrc}
                     controls
@@ -238,18 +249,20 @@ const VideoReviews = () => {
                     onPlay={() => handleVideoPlay(index)}
                     onPause={() => handleVideoPause(index)}
                     onClick={(e) => {
-                      const target = e.target as HTMLVideoElement
-                      const controls = target.controls
+                      const target = e.target as HTMLVideoElement;
+                      const controls = target.controls;
                       // Если клик не на контролы, разрешаем стандартное поведение
                       if (!controls || (e.target as HTMLElement).tagName !== 'BUTTON') {
-                        return
+                        return;
                       }
                       // Перехватываем клик на кнопку fullscreen
-                      const fullscreenButton = (e.target as HTMLElement).closest('button[aria-label*="fullscreen"], .vjs-fullscreen-control')
+                      const fullscreenButton = (e.target as HTMLElement).closest(
+                        'button[aria-label*="fullscreen"], .vjs-fullscreen-control',
+                      );
                       if (fullscreenButton) {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        handleFullscreenRequest(index)
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handleFullscreenRequest(index);
                       }
                     }}
                     sx={{
@@ -344,8 +357,10 @@ const VideoReviews = () => {
         >
           {Array.from({ length: totalSlides }).map((_, index) => {
             // Активная точка - текущий слайд на мобильных, средний на десктопе
-            const activeIndex = isMobile ? currentSlide : currentSlide + Math.floor(slidesPerView / 2)
-            const isActive = index === activeIndex
+            const activeIndex = isMobile
+              ? currentSlide
+              : currentSlide + Math.floor(slidesPerView / 2);
+            const isActive = index === activeIndex;
             return (
               <Box
                 key={index}
@@ -359,7 +374,7 @@ const VideoReviews = () => {
                   flexShrink: 0,
                 }}
               />
-            )
+            );
           })}
         </Box>
       </Box>
@@ -423,8 +438,7 @@ const VideoReviews = () => {
         </Box>
       </Modal>
     </Box>
-  )
-}
+  );
+};
 
-export default VideoReviews
-
+export default VideoReviews;
