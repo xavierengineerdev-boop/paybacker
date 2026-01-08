@@ -6,8 +6,6 @@ import 'react-phone-number-input/style.css'
 import { sendToTelegram, FormData } from '../../services/telegramService'
 import { getUserInfo, getUserIP, formatDateTime } from '../../utils/userInfo'
 import { useSuccessPopup } from '../../contexts/SuccessPopupContext'
-import type E164Number from 'react-phone-number-input'
-
 interface ContactModalProps {
   open: boolean
   onClose: () => void
@@ -15,7 +13,7 @@ interface ContactModalProps {
 
 interface FormInputs {
   name: string
-  phone: E164Number | undefined
+  phone: string | undefined
   amount: string
 }
 
@@ -37,7 +35,7 @@ const ContactModal = ({ open, onClose }: ContactModalProps) => {
     setError(null)
   }
 
-  const handlePhoneChange = (value: E164Number | undefined) => {
+  const handlePhoneChange = (value: string | undefined) => {
     setFormInputs((prev) => ({
       ...prev,
       phone: value,
