@@ -19,9 +19,9 @@ const Hero = () => {
   return (
     <Box
       component={motion.div}
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
       sx={{
         position: 'relative',
         width: '100%',
@@ -39,9 +39,9 @@ const Hero = () => {
       {/* Левая колонка */}
       <Box
         component={motion.div}
-        initial={{ opacity: 0, x: -30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
         sx={{
           flex: 1,
           maxWidth: { xs: '100%', md: '600px' },
@@ -54,9 +54,9 @@ const Hero = () => {
         {/* Заголовок */}
         <Typography
           component={motion.div}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
           sx={{
             fontFamily: "'Raleway', sans-serif",
             fontStyle: 'normal',
@@ -67,8 +67,8 @@ const Hero = () => {
             color: '#000000',
           }}
         >
-          <Box component="span">Charge</Box>
-          <Box component="span" sx={{ color: '#1524C9' }}>BACK</Box>
+          <Box component="span">Pay</Box>
+          <Box component="span" sx={{ color: '#1524C9' }}>backer</Box>
           {' - возврат денег от брокера-мошенника'}
         </Typography>
 
@@ -130,9 +130,9 @@ const Hero = () => {
       {/* Правая колонка - Форма */}
       <Box
         component={motion.div}
-        initial={{ opacity: 0, x: 30 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, delay: 0.4, ease: 'easeOut' }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
         sx={{ flex: 1, maxWidth: '580px', display: { xs: 'none', md: 'block' } }}
       >
         <ContactForm />

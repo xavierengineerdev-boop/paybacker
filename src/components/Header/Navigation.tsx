@@ -1,5 +1,4 @@
 import { Box, Typography } from '@mui/material'
-import { motion } from 'framer-motion'
 import { scrollToSection } from '../../utils/scrollToSection'
 
 const navItems = [
@@ -21,10 +20,7 @@ const Navigation = () => {
     >
       {navItems.map((item) => (
         <Typography
-          component={motion.div}
           key={item.id}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
           onClick={() => scrollToSection(item.id)}
           sx={{
             fontFamily: "'Raleway', sans-serif",

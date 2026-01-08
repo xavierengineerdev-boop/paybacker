@@ -6,10 +6,10 @@ const WhyTrustUs = () => {
     <Box
       component={motion.div}
       id="why-us"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
       sx={{
         position: 'relative',
         width: '100%',
@@ -85,10 +85,10 @@ const WhyTrustUs = () => {
       {/* Карточка 1: 84% */}
       <Box
         component={motion.div}
-        initial={{ opacity: 0, scale: 0.9 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        transition={{ duration: 0.2 }}
         sx={{
           position: { xs: 'relative', md: 'absolute' },
           width: { xs: '100%', md: '419.83px' },

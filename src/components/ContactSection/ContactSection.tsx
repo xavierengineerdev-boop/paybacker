@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { Box, Typography, TextField, Button, Alert, CircularProgress } from '@mui/material'
 import { motion } from 'framer-motion'
+import PhoneInput from 'react-phone-number-input'
+import 'react-phone-number-input/style.css'
 import { sendToTelegram, FormData } from '../../services/telegramService'
 import { getUserInfo, getUserIP, formatDateTime } from '../../utils/userInfo'
 import { useSuccessPopup } from '../../contexts/SuccessPopupContext'
 import { scrollToSection } from '../../utils/scrollToSection'
+import type { E164Number } from 'react-phone-number-input'
 
 interface FormInputs {
   name: string
-  phone: string
+  phone: E164Number | undefined
   amount: string
 }
 
@@ -30,6 +33,14 @@ const ContactSection = () => {
     setError(null)
   }
 
+  const handlePhoneChange = (value: E164Number | undefined) => {
+    setFormInputs((prev) => ({
+      ...prev,
+      phone: value,
+    }))
+    setError(null)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
@@ -39,8 +50,15 @@ const ContactSection = () => {
       setError('Пожалуйста, введите ваше имя')
       return
     }
-    if (!formInputs.phone.trim()) {
+    if (!formInputs.phone) {
       setError('Пожалуйста, введите номер телефона')
+      return
+    }
+    
+    // Проверяем, что номер содержит не только код страны
+    const phoneString = String(formInputs.phone)
+    if (phoneString.length <= 4) {
+      setError('Пожалуйста, введите полный номер телефона')
       return
     }
     if (!formInputs.amount.trim()) {
@@ -59,7 +77,7 @@ const ContactSection = () => {
       // Подготовка данных для отправки
       const fullFormData: FormData = {
         name: formInputs.name.trim(),
-        phone: `+1 ${formInputs.phone.trim()}`,
+        phone: formInputs.phone ? String(formInputs.phone) : '',
         amount: formInputs.amount.trim(),
         datetime,
         ip,
@@ -96,10 +114,10 @@ const ContactSection = () => {
     <Box
       component={motion.div}
       id="contacts"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
       sx={{
         position: 'relative',
         width: '100%',
@@ -258,90 +276,27 @@ const ContactSection = () => {
           <Box
             sx={{
               width: '100%',
-              height: '50px',
-              boxSizing: 'border-box',
-              background: '#FFFFFF',
-              borderRadius: '10px',
-              border: '1px solid #1524C9',
-              display: 'flex',
-              alignItems: 'center',
-              paddingLeft: '12px',
-            }}
-          >
-            {/* Левая часть с флагом и кодом */}
-            <Box
-              sx={{
+              '& .PhoneInput': {
+                width: '100%',
+                height: '50px',
+                boxSizing: 'border-box',
+                background: '#FFFFFF',
+                borderRadius: '10px',
+                border: '1px solid #1524C9',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
-              }}
-            >
-              {/* Флаг */}
-              <Box
-                component="img"
-                src="/images/flag-us.svg"
-                alt="US Flag"
-                sx={{
-                  width: '23px',
-                  height: '12px',
-                }}
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none'
-                }}
-              />
-              {/* +1 */}
-              <Typography
-                sx={{
-                  fontFamily: "'Raleway', sans-serif",
-                  fontStyle: 'normal',
-                  fontWeight: 500,
-                  fontSize: '16px',
-                  lineHeight: '110%',
-                  letterSpacing: '-0.011em',
-                  color: '#727272',
-                }}
-              >
-                +1
-              </Typography>
-              {/* Стрелка вниз */}
-              <Box
-                sx={{
-                  width: '8px',
-                  height: '7px',
-                  backgroundColor: '#727272',
-                  clipPath: 'polygon(50% 100%, 0% 0%, 100% 0%)',
-                }}
-              />
-            </Box>
-            {/* Разделитель */}
-            <Box
-              sx={{
-                width: '1px',
-                height: '28px',
-                border: '1px solid #072FFF',
-                marginLeft: '8px',
-                marginRight: '8px',
-              }}
-            />
-            {/* Поле ввода телефона */}
-            <TextField
-              placeholder="50 123 4567"
-              value={formInputs.phone}
-              onChange={handleChange('phone')}
-              disabled={loading}
-              required
-              sx={{
+                paddingLeft: '12px',
+                fontFamily: "'Raleway', sans-serif",
+              },
+              '& .PhoneInputInput': {
                 flex: 1,
-                '& .MuiOutlinedInput-root': {
-                  height: '50px',
-                  border: 'none',
-                  fontFamily: "'Raleway', sans-serif",
-                  fontSize: '16px',
-                  '& fieldset': {
-                    border: 'none',
-                  },
-                },
-                '& .MuiInputBase-input::placeholder': {
+                height: '50px',
+                border: 'none',
+                outline: 'none',
+                fontFamily: "'Raleway', sans-serif",
+                fontSize: '16px',
+                paddingLeft: '8px',
+                '&::placeholder': {
                   fontFamily: "'Raleway', sans-serif",
                   fontStyle: 'normal',
                   fontWeight: 500,
@@ -351,7 +306,29 @@ const ContactSection = () => {
                   color: '#727272',
                   opacity: 1,
                 },
-              }}
+              },
+              '& .PhoneInputCountryIcon': {
+                width: '23px',
+                height: '12px',
+                borderRadius: '2px',
+              },
+              '& .PhoneInputCountrySelectArrow': {
+                width: '8px',
+                height: '7px',
+                backgroundColor: '#727272',
+                clipPath: 'polygon(50% 100%, 0% 0%, 100% 0%)',
+                marginLeft: '6px',
+              },
+            }}
+          >
+            <PhoneInput
+              international
+              defaultCountry="US"
+              value={formInputs.phone}
+              onChange={handlePhoneChange}
+              disabled={loading}
+              placeholder="50 123 4567"
+              withCountryCallingCode
             />
           </Box>
 
@@ -520,7 +497,7 @@ const ContactSection = () => {
               color: '#FFFFFF',
             }}
           >
-            ChargeBACK
+            Paybacker
           </Typography>
 
           {/* Адрес */}
@@ -571,7 +548,7 @@ const ContactSection = () => {
               opacity: 0.5,
             }}
           >
-            © Charge<Box component="span" sx={{ color: '#000000', opacity: 1 }}>BACK</Box>
+            © Pay<Box component="span" sx={{ color: '#000000', opacity: 1 }}>backer</Box>
           </Typography>
         </Box>
 

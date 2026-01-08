@@ -5,21 +5,155 @@
 }
 
 html {
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: hidden !important;
+  height: 100%;
+  width: 100%;
+  position: relative;
 }
 
 body {
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow: auto !important;
+  overflow-x: hidden !important;
   width: 100%;
   max-width: 100vw;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
 }
 
 #root {
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
+  overflow-y: visible;
+  min-height: 100vh;
 }
+
+/* Стили для react-phone-number-input */
+.PhoneInput {
+  display: flex;
+  align-items: center;
+  font-family: 'Raleway', sans-serif;
+}
+
+.PhoneInputInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+  background: transparent;
+}
+
+.PhoneInputCountry {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 8px;
+}
+
+.PhoneInputCountryIcon {
+  width: 20px;
+  height: 12px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.PhoneInputCountrySelect {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: 'Raleway', sans-serif;
+}
+
+.PhoneInputCountrySelectArrow {
+  width: 6px;
+  height: 6px;
+  background-color: #727272;
+  clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+  margin-left: 6px;
+}
+
+.PhoneInputCountrySelectArrow--open {
+  transform: rotate(180deg);
+}
+
+/* Отображение кода страны */
+.PhoneInputCountryIcon--border {
+  border: none;
+}
+
+/* Стили для кода страны в селекторе */
+.PhoneInputCountrySelect {
+  color: #727272;
+  font-family: 'Raleway', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 110%;
+  letter-spacing: -0.011em;
+}
+
+/* Отображение кода страны */
+.PhoneInputCountrySelect .PhoneInputCountrySelectArrow {
+  margin-left: 4px;
+}
+
+/* Показываем код страны в селекторе */
+.PhoneInputCountrySelect::after {
+  content: attr(data-country-code);
+  margin-left: 4px;
+}
+
+/* Скрываем стандартный селектор и показываем кастомный */
+.PhoneInputCountrySelect--focus {
+  outline: none;
+}
+
+/* Убираем второй скролл - переопределяем стили MUI */
+.MuiModal-root {
+  overflow: hidden !important;
+}
+
+.MuiModal-backdrop {
+  overflow: hidden !important;
+}
+
+/* Оптимизация производительности для анимаций */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Оптимизация для плавного скролла */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Оптимизация для элементов с анимациями */
+[data-framer-motion] {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Отключение анимаций для пользователей с предпочтением уменьшенной анимации */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
 
 

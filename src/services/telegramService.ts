@@ -18,7 +18,7 @@ export interface FormData {
 export const sendToTelegram = async (data: FormData): Promise<boolean> => {
   try {
     const message = `
-🆕 Новая заявка с сайта ChargeBACK
+🆕 Новая заявка с сайта Paybacker
 
 👤 Имя: ${data.name}
 📞 Телефон: ${data.phone}

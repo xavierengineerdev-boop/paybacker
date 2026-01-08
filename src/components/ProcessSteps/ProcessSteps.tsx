@@ -5,10 +5,10 @@ const ProcessSteps = () => {
   return (
     <Box
       component={motion.div}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
       sx={{
         position: 'relative',
         width: '100%',
@@ -30,10 +30,10 @@ const ProcessSteps = () => {
       {/* Карточка 1 - Консультации экспертов */}
       <Box
         component={motion.div}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.1 }}
+        transition={{ duration: 0.2 }}
         sx={{
           position: 'relative',
           width: { xs: '100%', md: '410.37px' },
@@ -232,10 +232,10 @@ const ProcessSteps = () => {
       {/* Карточка 2 - Оспаривание платежей (выше других) */}
       <Box
         component={motion.div}
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        transition={{ duration: 0.2 }}
         sx={{
           position: 'relative',
           width: { xs: '100%', md: '412.21px' },

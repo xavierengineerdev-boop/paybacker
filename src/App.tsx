@@ -21,6 +21,7 @@ const App = () => {
           backgroundColor: '#FFFFFF',
           overflowX: 'hidden',
           overflowY: 'visible',
+          minHeight: '100vh',
         }}
       >
         <Header />

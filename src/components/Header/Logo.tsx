@@ -19,7 +19,7 @@ const Logo = () => {
           color: '#1E1E1E',
         }}
       >
-        Charge
+        Pay
       </Typography>
       <Typography
         component="span"
@@ -33,7 +33,7 @@ const Logo = () => {
           color: '#1524C9',
         }}
       >
-        BACK
+        backer
       </Typography>
     </Box>
   )
